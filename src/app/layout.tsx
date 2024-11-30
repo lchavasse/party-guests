@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "daily. | journal with voice and ai",
-  description: "the future of journaling with voice and ai",
+  title: "Fun Fun Fun",
+  description: "Lachlan's Birthday Drinks",
 };
 
 export default function RootLayout({
