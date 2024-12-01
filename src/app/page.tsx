@@ -3,11 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js'
 import { Afacad } from 'next/font/google';
-import dynamic from 'next/dynamic';
-
-const ReactConfetti = dynamic(() => import('react-confetti'), {
-  ssr: false
-});
+import confetti from 'canvas-confetti';
 
 const supabaseUrl = 'https://fwcuguulstooyzkkxtvg.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ3Y3VndXVsc3Rvb3l6a2t4dHZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjU0MzcyNTEsImV4cCI6MjA0MTAxMzI1MX0.DukHnchH5-5qs_F6c4jJtTWTw3CIaNHx2sWenhUnGFw';
@@ -26,7 +22,6 @@ const EmailSignup = () => {
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false);
   const [numberOfPeople, setNumberOfPeople] = useState(1);
 
   useEffect(() => {
@@ -55,13 +50,15 @@ const EmailSignup = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  // Add this useEffect to automatically hide confetti after 5 seconds
   useEffect(() => {
-    if (showConfetti) {
-      const timer = setTimeout(() => setShowConfetti(false), 5000);
-      return () => clearTimeout(timer);
+    if (submitted) {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
     }
-  }, [showConfetti]);
+  }, [submitted]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -80,7 +77,6 @@ const EmailSignup = () => {
       
       if (error) throw error;
       setSubmitted(true);
-      setShowConfetti(true);
       setName('');
       setPhone('');
       setNumberOfPeople(1);
@@ -94,7 +90,6 @@ const EmailSignup = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      {showConfetti && <ReactConfetti />}
       <div className="flex flex-col items-center justify-center w-[90%]">
         <div className="text-center">
           <h1 className={`text-4xl mb-2 text-gray-900 h-auto ${afacad.className}`}>
